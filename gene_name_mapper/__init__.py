@@ -1,6 +1,8 @@
+import os
 import sqlite3
 
-DB_DIR = 'data/genes.db'
+PATH = os.path.dirname(__file__)
+DB_DIR = os.path.join(PATH, 'data', 'genes.db')
 
 def get_gene_symbol(accessions):
     """

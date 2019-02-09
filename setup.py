@@ -1,11 +1,5 @@
 from setuptools import setup, find_packages
-import numpy
 
-
-
-
-install_requires = [
-]
 
 setup(
     name='gene_name_mapper',
@@ -14,10 +8,11 @@ setup(
     author_email='yjzhang@cs.washington.edu',
     url='https://github.com/yjzhang/gene_name_mapper',
     license='MIT',
-    install_requires=install_requires,
     packages=find_packages("."),
-    test_suite='nose.collector',
-    tests_require=['nose', 'flaky'],
+    # this is for including the data dir in the package.
+    zip_safe=False,
+    package_data={'gene_name_mapper': ['data/genes.db']},
+    include_package_data=True,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Topic :: Scientific/Engineering :: Bio-Informatics',
