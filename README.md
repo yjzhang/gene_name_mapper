@@ -3,12 +3,8 @@ Gene Name Mapper: an utility to match gene names with various IDs/accession code
 
 Data source: https://www.genenames.org/download/custom/
 
-Goal:
 
-`gene_names = get_gene_name(['NM_...', 'NM_...'], species='human')`
-`refseq_ids = get_refseq_ids(['gene1', 'gene2',...])`
-`ensembl_ids = get_ensembl_ids([...])`
+Example: 
 
-how to implement this? load a static file into memory? sqlite database?
-
-Sure, sqlite...
+    import gene_name_mapper
+    gene_symbols = gene_name_mapper.get_gene_symbol(['NM_001320', 'NM_001178126', 'NM_001136213'])
