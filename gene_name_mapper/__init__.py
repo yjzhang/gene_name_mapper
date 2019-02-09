@@ -15,7 +15,11 @@ def get_gene_symbol(accessions):
         accessions = [accessions]
     all_results = []
     for a in accessions:
-        c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "RefSeq IDs"=? OR "Ensembl gene ID"=?', (a, a))
+        a2 = '%' + a + '%'
+        if a.startswith('N'):
+            c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "RefSeq IDs" LIKE ? ESCAPE "_"', (a2,))
+        elif a.startswith('E'):
+            c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "Ensembl gene ID"=?', (a,))
         results = c.fetchall()
         if len(results) == 1:
             all_results.append(results[0][0])
@@ -26,6 +30,31 @@ def get_gene_symbol(accessions):
             print('WARNING: multiple results found for ' + a + '. Using arbitrary result.')
             all_results.append(results[0][0])
     return all_results
+
+def get_refseq_id(symbols):
+    """
+    Given a string or list of gene symbols,
+    this returns a list of RefSeq IDs ('NM_...')
+    """
+    conn = sqlite3.connect(DB_DIR)
+    c = conn.cursor()
+    if isinstance(symbols, str):
+        symbols = [symbols]
+    all_results = []
+    for a in symbols:
+        a = a.upper()
+        c.execute('SELECT "RefSeq IDs" FROM gene_names_homo_sapiens WHERE "Approved symbol"=?', (a,))
+        results = c.fetchall()
+        if len(results) == 1:
+            all_results.append(results[0][0])
+        elif len(results) == 0:
+            print('WARNING: no results found for ' + a)
+            all_results.append(None)
+        else:
+            print('WARNING: multiple results found for ' + a + '. Using arbitrary result.')
+            all_results.append(results[0][0])
+    return all_results
+
 
 if __name__ == '__main__':
     print(get_gene_symbol('NM_001178126'))

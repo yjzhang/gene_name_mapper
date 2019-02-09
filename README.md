@@ -8,3 +8,4 @@ Example:
 
     import gene_name_mapper
     gene_symbols = gene_name_mapper.get_gene_symbol(['NM_001320', 'NM_001178126', 'NM_001136213'])
+    refseq_ids = gene_name_mapper.get_refseq_id(['KCNB1', 'REST'])
