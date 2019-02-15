@@ -17,7 +17,7 @@ def get_gene_symbol(accessions):
     for a in accessions:
         a2 = '%' + a + '%'
         if a.startswith('N'):
-            c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "RefSeq IDs" LIKE ? ESCAPE "_"', (a2,))
+            c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "RefSeq IDs"=?', (a,))
         elif a.startswith('E'):
             c.execute('SELECT "Approved symbol" FROM gene_names_homo_sapiens WHERE "Ensembl gene ID"=?', (a,))
         results = c.fetchall()
@@ -28,7 +28,10 @@ def get_gene_symbol(accessions):
             all_results.append(None)
         else:
             print('WARNING: multiple results found for ' + a + '. Using arbitrary result.')
+            print(results)
             all_results.append(results[0][0])
+    c.close()
+    conn.close()
     return all_results
 
 def get_refseq_id(symbols):
@@ -53,6 +56,8 @@ def get_refseq_id(symbols):
         else:
             print('WARNING: multiple results found for ' + a + '. Using arbitrary result.')
             all_results.append(results[0][0])
+    c.close()
+    conn.close()
     return all_results
 
 
